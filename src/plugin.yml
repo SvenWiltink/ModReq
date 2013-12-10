@@ -1,0 +1,7 @@
+name: ModReq
+main: me.sw123.modreq.ModReq
+authors: [Sgt_Tailor (aka sw123)]
+version: 1
+commands:
+    modreq:
+        description: the modreq command
