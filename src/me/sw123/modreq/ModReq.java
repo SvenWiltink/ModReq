@@ -2,6 +2,7 @@ package me.sw123.modreq;
 
 import me.sw123.modreq.querry.StaticQuerry.QuerryType;
 import me.sw123.modreq.querry.StaticQuerryManager;
+import me.sw123.modreq.querry.insert.InsertCommentQuerry;
 import me.sw123.modreq.querry.insert.InsertTicketQuerry;
 import me.sw123.modreq.querry.select.SelectAllQuerry;
 
@@ -24,6 +25,7 @@ public class ModReq extends JavaPlugin implements Listener, CommandExecutor{
 		initDataBase();
 		this.getServer().getPluginManager().registerEvents(this, this);
 		getCommand("modreq").setExecutor(this);
+		getCommand("comment").setExecutor(this);
 	}
 
 	private void initQuerryManager() {
@@ -63,6 +65,23 @@ public class ModReq extends JavaPlugin implements Listener, CommandExecutor{
 						message += (i == 0 ? "" : " ") + args[i];
 					}
 					InsertTicketQuerry q = new InsertTicketQuerry(p, message);
+					db.addQuerryToQue(q);
+					return true;
+				}else{
+					sender.sendMessage(ChatColor.RED + "not enough arguments");
+				}
+			}
+		}else
+		if(command.getName().equals("comment")){
+			if(sender instanceof Player){
+				if(args.length > 1){
+					Player p = (Player) sender;
+					String message = "";
+					int ticket = Integer.parseInt(args[0]);
+					for(int i = 1; i < args.length; i++){
+						message += (i == 0 ? "" : " ") + args[i];
+					}
+					InsertCommentQuerry q = new InsertCommentQuerry(ticket, p, message);
 					db.addQuerryToQue(q);
 					return true;
 				}else{

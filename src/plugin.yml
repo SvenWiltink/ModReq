@@ -5,3 +5,5 @@ version: 1
 commands:
     modreq:
         description: the modreq command
+    comment:
+        description: derp
