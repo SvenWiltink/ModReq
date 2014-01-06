@@ -1,4 +1,4 @@
-package me.sw123.modreq.querry;
+package me.sw123.modreq.query;
 
 public interface Cancellable {
 

@@ -1,17 +1,14 @@
-package me.sw123.modreq.querry.insert;
+package me.sw123.modreq.query.insert;
 
-import org.bukkit.ChatColor;
+import me.sw123.modreq.query.UpdateQuery;
+
 import org.bukkit.entity.Player;
 
-import me.sw123.modreq.querry.UpdateQuerry;
-
-public class InsertTicketQuerry extends UpdateQuerry{
+public class InsertTicketQuery extends UpdateQuery{
 	private static String q = 	"insert into ticket (submitter,message,world,locx,locy,locz,pitch,yaw) " +
 									"values (?,?,?,?,?,?,?,?)";
-	private Player p;
-	public InsertTicketQuerry(Player p, String message) {
-		super(q, playerMessageToArray(p,message));
-		this.p = p;
+	public InsertTicketQuery(Player p, String message, Runnable post) {
+		super(q, playerMessageToArray(p,message), post);
 	}
 
 	private static Object[] playerMessageToArray(Player p, String message) {
@@ -29,9 +26,6 @@ public class InsertTicketQuerry extends UpdateQuerry{
 
 	@Override
 	public void onComplete() {
-		if(p.isOnline()){
-			p.sendMessage(ChatColor.GREEN + "Ticket submitted");
-		}
 	}
 
 }

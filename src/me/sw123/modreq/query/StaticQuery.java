@@ -1,17 +1,15 @@
-package me.sw123.modreq.querry;
+package me.sw123.modreq.query;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.bukkit.Bukkit;
-
-public class StaticQuerry implements IQuerry{
+public class StaticQuery implements IQuery{
 	
 	private ArrayList<String> Querry;
-	private QuerryType type;
-	public StaticQuerry(QuerryType t, String[] q){
+	private QueryType type;
+	public StaticQuery(QueryType t, String[] q){
 		type = t;
 		Querry = new ArrayList<String>();
 		for(int i = 0; i < q.length; i++){
@@ -27,12 +25,12 @@ public class StaticQuerry implements IQuerry{
 		}
 		stat.executeBatch();
 	}
-	public enum QuerryType{
+	public enum QueryType{
 		CREATEDB("createDB", "Database created/updated");
 		
 		private String name;
 		private String log;
-		private QuerryType(String s,String l){
+		private QueryType(String s,String l){
 			name = s;
 			log = l;
 		}
@@ -42,6 +40,9 @@ public class StaticQuerry implements IQuerry{
 	}
 	@Override
 	public void onComplete() {
-		Bukkit.broadcastMessage(type.log);
+		System.out.println(type.log);
+	}
+	@Override
+	public void runPost() {
 	}
 }

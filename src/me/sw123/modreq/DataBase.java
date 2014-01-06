@@ -3,20 +3,21 @@ package me.sw123.modreq;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
-import me.sw123.modreq.querry.IQuerry;
-import me.sw123.modreq.querry.QuerryQue;
-import me.sw123.modreq.querry.StaticQuerry.QuerryType;
-import me.sw123.modreq.querry.StaticQuerryManager;
+import me.sw123.modreq.query.IQuery;
+import me.sw123.modreq.query.QueryQue;
+import me.sw123.modreq.query.StaticQueryManager;
+import me.sw123.modreq.query.StaticQuery.QueryType;
 
 
 public class DataBase extends Thread{
 	private Connection conn;
 	private boolean enabled = true;
-	private QuerryQue que;
+	private QueryQue que;
 	public DataBase(String ip, String port,String database, String user, String pass){
         try {
-        	que = new QuerryQue();
+        	que = new QueryQue();
         	String link = "jdbc:mysql://"+ ip + ":" + port + "/" + database;
 			conn = DriverManager.getConnection(link, user, pass);
         	this.start();
@@ -25,9 +26,9 @@ public class DataBase extends Thread{
 		}
         
 	}
-	public void runQuerryNow(IQuerry q){
+	public void runQueryNow(IQuery q){
 		try {
-			que.runQuerryNow(conn, q);
+			que.runQueryNow(conn, q);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -40,9 +41,11 @@ public class DataBase extends Thread{
 				try {
 					que.executeNext(conn);
 				} catch (SQLException e) {
+					Logger.getLogger("minecraft").severe("An error occurred while executing a query, thus skipping it");
+					que.removeFirst();
 					e.printStackTrace();
 					try {
-						DataBase.sleep(1000000);
+						DataBase.sleep(1000);
 					} catch (InterruptedException er) {
 						er.printStackTrace();
 					}
@@ -59,10 +62,10 @@ public class DataBase extends Thread{
 	}
 	
 	private void createTables() {
-		que.addQuerryToQue(StaticQuerryManager.getQuerry(QuerryType.CREATEDB));
+		que.addQueryToQue(StaticQueryManager.getQuery(QueryType.CREATEDB));
 	}
-	public void addQuerryToQue(IQuerry q){
-		que.addQuerryToQue(q);
+	public void addQueryToQue(IQuery q){
+		que.addQueryToQue(q);
 	}
 	public void terminate(){
 		try {
