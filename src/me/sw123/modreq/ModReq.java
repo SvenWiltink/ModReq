@@ -29,8 +29,8 @@ public class ModReq extends JavaPlugin implements Listener, CommandExecutor{
 		String ip = "localhost";
 		String database = "modreq";
 		String port = "3306";
-		String user = "root";
-		String pass = "";
+		String user = "ModReq";
+		String pass = "KoEkJe5991";
 		db = new DataBase(ip, port,database, user, pass);
 	}
 	public static StaticQueryManager getqueryManager(){

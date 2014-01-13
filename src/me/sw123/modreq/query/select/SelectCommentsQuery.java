@@ -11,7 +11,7 @@ import me.sw123.modreq.ticket.Comment;
 public class SelectCommentsQuery extends ResultQuery{
 	
 	private ArrayList<Comment> res = new ArrayList<Comment>();
-	private static String q = "SELECT commenter, comment, date FROM comment" +
+	private static String q = "SELECT ticket, commenter, comment, date FROM comment" +
 												" WHERE comment.ticket = ?";
 	public SelectCommentsQuery(int id, Runnable post) {
 		super(q, new String[]{Integer.toString(id)}, post);
@@ -21,10 +21,11 @@ public class SelectCommentsQuery extends ResultQuery{
 	public void onComplete() throws SQLException {
 		ResultSet result = this.getResult();
 		while(result.next()){
-			String commenter = result.getString(1);
-			String comment = result.getString(2);
-			Timestamp time = result.getTimestamp(3);
-			Comment c = new Comment(commenter, comment, time);
+			int ticket = result.getInt(1);
+			String commenter = result.getString(2);
+			String comment = result.getString(3);
+			Timestamp time = result.getTimestamp(4);
+			Comment c = new Comment(ticket, commenter, comment, time);
 			res.add(c);
 		}
 	}

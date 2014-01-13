@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 
 import me.sw123.modreq.ModReq;
 import me.sw123.modreq.query.ResultQuery;
-import me.sw123.modreq.ticket.Comment;
 import me.sw123.modreq.ticket.Priority;
+import me.sw123.modreq.ticket.Rank;
 import me.sw123.modreq.ticket.Staff;
 import me.sw123.modreq.ticket.Status;
 import me.sw123.modreq.ticket.Ticket;
@@ -18,10 +18,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-public class SelectTenTickets extends ResultQuery{
+public class SelectTenTicketsQuery extends ResultQuery{
 	
-private Ticket res = null;
-private SelectCommentsQuery commentsQuery;
+private ArrayList<Ticket> res = null;
+private SelectTenCommentsQuery commentsQuery;
 private static String q = "SELECT ticket.id, ticket.submitter, ticket.message, ticket.date," +
 											" world, locx, locy, locz, pitch, yaw, status.*, priority.* FROM ticket" +
 											" OUTER JOIN status ON status.id = ticket.status" +
@@ -34,9 +34,9 @@ private static String q = "SELECT ticket.id, ticket.submitter, ticket.message, t
  * Selects a ticket with the specified id
  * @param id
  */
-public SelectTenTickets(int status, Runnable post) {
+public SelectTenTicketsQuery(int status, Runnable post) {
 	super(q, new String[]{Integer.toString(status)}, post);
-	commentsQuery = new SelectCommentsQuery(status,null);
+	commentsQuery = new SelectTenCommentsQuery(status,null);
 	ModReq.getDataBase().addQueryToQue(commentsQuery);
 	
 }
@@ -77,15 +77,13 @@ public void onComplete() throws SQLException {
 		String priority_desc = rs.getString(16);
 		priority = new Priority(priority_id, priority_name, priority_desc);
 		
-		ArrayList<Comment> comments = commentsQuery.getComments();
-		Staff staff = staffQuery.getStaff();
-		
-		res = new Ticket(id, status, submitter, message, time, priority, staff, loc);
-		res.setComments(comments);
-		
+		Staff staff = new Staff(1,"derp",new Rank(1,"test",priority_id));
+		Ticket t = new Ticket(id, status, submitter, message, time, priority, staff, loc);
+		t.setComments(commentsQuery.getComment(id));
+		res.add(t);
 	}
 }
-public Ticket getTicket(){
+public ArrayList<Ticket> getTickets(){
 	return res;
 }
 }
