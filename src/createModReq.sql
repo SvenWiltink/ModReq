@@ -8,19 +8,16 @@ CREATE TABLE IF NOT EXISTS priority (
 CREATE TABLE IF NOT EXISTS rank (
     id INT(2),
     name CHAR(16),
-    max_priority INT(2),
-    PRIMARY KEY (id),
-    FOREIGN KEY (max_priority)
-        REFERENCES priority (id)
+    max_priority INT(2) REFERENCES priority (id),
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS staff (
     id INT,
     name CHAR(16),
-    rank INT,
-    PRIMARY KEY (id),
-    FOREIGN KEY (rank)
-        REFERENCES rank (id)
+    rank INT REFERENCES rank (id),
+    PRIMARY KEY (id)
+        
 );
 
 CREATE TABLE IF NOT EXISTS status (
@@ -36,25 +33,19 @@ CREATE TABLE IF NOT EXISTS ticket (
     message CHAR(255),
     date TIMESTAMP,
     priority INT DEFAULT 1,
-    status INT DEFAULT 1,
-    staff INT DEFAULT NULL,
+    status INT DEFAULT 1 REFERENCES status (id),
+    staff INT DEFAULT NULL  REFERENCES staff (id),
     world CHAR(32) NOT NULL,
     locx FLOAT NOT NULL,
     locy FLOAT NOT NULL,
     locz FLOAT NOT NULL,
     pitch FLOAT NOT NULL,
     yaw FLOAT NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (status)
-        REFERENCES status (id),
-    FOREIGN KEY (staff)
-        REFERENCES staff (id)
+    PRIMARY KEY (id)
 );
 CREATE TABLE IF NOT EXISTS comment (
-    ticket INT,
+    ticket INT REFERENCES ticket (id),
     commenter CHAR(16),
     comment CHAR(255),
-    date TIMESTAMP,
-    FOREIGN KEY (ticket)
-        REFERENCES ticket (id)
+    date TIMESTAMP
 );
