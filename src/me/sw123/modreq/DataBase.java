@@ -15,11 +15,20 @@ public class DataBase extends Thread{
 	private Connection conn;
 	private boolean enabled = true;
 	private QueryQue que;
-	public DataBase(String ip, String port,String database, String user, String pass){
+	public DataBase(Settings settings){
         try {
         	que = new QueryQue();
-        	String link = "jdbc:mysql://"+ ip + ":" + port + "/" + database;
-			conn = DriverManager.getConnection(link, user, pass);
+        	if(settings.DATABASE_USEMYSQL){
+	        	String ip = settings.DATABASE_MYSQL_IP;
+	        	String port = settings.DATABASE_MYSQL_PORT;
+	        	String database = settings.DATABASE_MYSQL_DATABASE;
+	        	String user = settings.DATABASE_MYSQL_USER;
+	        	String pass = settings.DATABASE_MYSQL_PASSWORD;
+	        	String link = "jdbc:mysql://"+ ip + ":" + port + "/" + database;
+				conn = DriverManager.getConnection(link, user, pass);
+        	}else{
+        		conn = DriverManager.getConnection("jdbc:sqlite:plugins/ModReq/DataBase.sql");
+        	}
         	this.start();
 		} catch (SQLException e) {
 			e.printStackTrace();

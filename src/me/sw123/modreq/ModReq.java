@@ -1,11 +1,12 @@
 package me.sw123.modreq;
 
+import java.io.IOException;
+
 import me.sw123.modreq.commands.ModReqCommand;
 import me.sw123.modreq.commands.TicketCommand;
 import me.sw123.modreq.query.StaticQuery.QueryType;
 import me.sw123.modreq.query.StaticQueryManager;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class ModReq extends JavaPlugin{
@@ -16,9 +17,28 @@ public class ModReq extends JavaPlugin{
 	public void onEnable() {
 		instance = this;
 		initqueryManager();
+		initConfig();
 		initDataBase();
 		getCommand("modreq").setExecutor(new ModReqCommand());
 		getCommand("ticket").setExecutor(new TicketCommand());
+	}
+	public void onDisable(){
+		try {
+			settings.save();
+		} catch (IllegalArgumentException | IllegalAccessException
+				| IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	private void initConfig() {
+		settings = new Settings();
+		try {
+			settings.load();
+		} catch (IllegalArgumentException
+				| IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void initqueryManager() {
@@ -27,12 +47,7 @@ public class ModReq extends JavaPlugin{
 	}
 
 	private void initDataBase() {
-		String ip = "localhost";
-		String database = "modreq";
-		String port = "3306";
-		String user = "root";
-		String pass = "";
-		db = new DataBase(ip, port,database, user, pass);
+		db = new DataBase(settings);
 	}
 	public static StaticQueryManager getQueryManager(){
 		return qm;
