@@ -1,0 +1,27 @@
+To DO:
+
+* finish readMe
+* make last queries
+* make post Runables work with tickets
+* add custom messages and parser
+* create web interface
+* create desktop application?
+* format this
+
+
+Friday 4Th april 2014:
+
+     Accomplishments:
+          - added Settings and tested them
+               * The setting load and save correctly
+               * When changing setting while the server is running they will be overwritten on disable
+          - worked on the readme
+          - though of some ways to make the runables work
+          - the database also works with SQLite now
+
+     Problems:
+          - Haven't quite worked out the runables yet, but getting there
+          - Haven't decided on a lanuage for the webInterface yet, might be Node.js or Php
+          - When changing setting while the server is running they will be overwritten on disable, might work on a workaround
+        
+
