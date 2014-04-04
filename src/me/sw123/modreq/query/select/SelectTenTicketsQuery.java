@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import me.sw123.modreq.ModReq;
 import me.sw123.modreq.query.ResultQuery;
+import me.sw123.modreq.query.result.TicketResult;
 import me.sw123.modreq.ticket.Priority;
 import me.sw123.modreq.ticket.Rank;
 import me.sw123.modreq.ticket.Staff;
@@ -34,7 +35,7 @@ private static String q = "SELECT ticket.id, ticket.submitter, ticket.message, t
  * Selects a ticket with the specified id
  * @param id
  */
-public SelectTenTicketsQuery(int status, Runnable post) {
+public SelectTenTicketsQuery(int status, TicketResult post) {
 	super(q, new String[]{Integer.toString(status)}, post);
 	commentsQuery = new SelectTenCommentsQuery(status,null);
 	ModReq.getDataBase().addQueryToQue(commentsQuery);
